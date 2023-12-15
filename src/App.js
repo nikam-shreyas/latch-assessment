@@ -1,6 +1,16 @@
 import "./App.css";
 import React from "react";
 
+// Function to convert the RGB color to Hex color
+const convertRGBToHex = (rgb) => {
+  const regex = /\((\d+), (\d+), (\d+)\)/;
+  const [_, r, g, b] = rgb.match(regex);
+  return `#${(+r).toString(16).padStart(2, "0")}${(+g)
+    .toString(16)
+    .padStart(2, "0")}${(+b).toString(16).padStart(2, "0")}`;
+};
+
+// Function to render the String containing line breaks with <br> tag
 const StringWithLineBreaks = ({ text }) => {
   if (!text) {
     return null;
@@ -20,6 +30,7 @@ const StringWithLineBreaks = ({ text }) => {
   );
 };
 
+// Function to render the mention tagged text seperately
 const RenderMention = ({ item }) => {
   return (
     <span
@@ -39,14 +50,22 @@ const RenderMention = ({ item }) => {
   );
 };
 
+// Function to render the tags based on the type
 const TagFromString = ({ tagName, item }) => {
   let Tag = tagName;
-  if (tagName === "mention") {
-    Tag = "span";
-  } else if (tagName === "lic") {
-    Tag = "li";
-  } else if (tagName === "block" || tagName === "clause") {
-    Tag = "div";
+  switch (tagName) {
+    case "mention":
+      Tag = "span";
+      break;
+    case "lic":
+      Tag = "li";
+      break;
+    case "block":
+    case "clause":
+      Tag = "div";
+      break;
+    default:
+      Tag = tagName;
   }
 
   const elementStyle = {
@@ -73,6 +92,7 @@ const TagFromString = ({ tagName, item }) => {
   );
 };
 
+// Function to render the children of the input json
 function RenderChildren({ item }) {
   const elementStyle = {
     fontWeight: item.bold ? "bold" : "",
@@ -98,9 +118,9 @@ function RenderChildren({ item }) {
   );
 }
 
+// Main App function
 function App() {
   const data = require("./input/input.json");
-
   return (
     <div className="container">
       {data.map((item) => {
@@ -109,13 +129,5 @@ function App() {
     </div>
   );
 }
-
-const convertRGBToHex = (rgb) => {
-  const regex = /\((\d+), (\d+), (\d+)\)/;
-  const [_, r, g, b] = rgb.match(regex);
-  return `#${(+r).toString(16).padStart(2, "0")}${(+g)
-    .toString(16)
-    .padStart(2, "0")}${(+b).toString(16).padStart(2, "0")}`;
-};
 
 export default App;
