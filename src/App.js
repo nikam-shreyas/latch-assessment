@@ -1,5 +1,11 @@
 import "./App.css";
 import React from "react";
+import { useContext, useState } from "react";
+
+const ClauseContext = React.createContext({
+  clauseNumber: 0,
+  setClauseNumber: () => {},
+});
 
 // Function to convert the RGB color to Hex color
 const convertRGBToHex = (rgb) => {
@@ -50,6 +56,19 @@ const RenderMention = ({ item }) => {
   );
 };
 
+const RenderClause = ({ item }) => {
+  const [clauseNumber, setClauseNumber] = useContext(ClauseContext);
+  return (
+    <div>
+      {item.text && <span>{item.text}</span>}
+      {item.children &&
+        item.children.map((child) => {
+          return <TagFromString tagName={child.type || "span"} item={child} />;
+        })}
+    </div>
+  );
+};
+
 // Function to render the tags based on the type
 const TagFromString = ({ tagName, item }) => {
   let Tag = tagName;
@@ -79,6 +98,7 @@ const TagFromString = ({ tagName, item }) => {
         <RenderMention item={item} />
       ) : (
         <Tag>
+          {/* {tagName === "clause" && "1. "} */}
           <span style={elementStyle}>
             <StringWithLineBreaks text={item.text} />
           </span>
@@ -120,13 +140,18 @@ function RenderChildren({ item }) {
 
 // Main App function
 function App() {
+  const [clauseNumber, setClauseNumber] = useState(0);
+
+  const value = { clauseNumber, setClauseNumber };
   const data = require("./input/input.json");
   return (
-    <div className="container">
-      {data.map((item) => {
-        return <RenderChildren item={item} />;
-      })}
-    </div>
+    <ClauseContext.Provider value={value}>
+      <div className="container">
+        {data.map((item) => {
+          return <RenderChildren item={item} />;
+        })}
+      </div>
+    </ClauseContext.Provider>
   );
 }
 
