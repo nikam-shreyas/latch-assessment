@@ -25,11 +25,12 @@ const RenderMention = ({ item }) => {
     <span
       style={{
         backgroundColor: convertRGBToHex(item.color),
-        borderRadius: "0.5rem",
+        color: "white",
+        borderRadius: "0.3rem",
         padding: "0.1rem",
       }}
     >
-      <span>{item.text}</span>
+      {item.text && <span>{item.text}</span>}
       {item.children &&
         item.children.map((child) => {
           return <TagFromString tagName={child.type || "span"} item={child} />;
@@ -51,9 +52,6 @@ const TagFromString = ({ tagName, item }) => {
   const elementStyle = {
     fontWeight: item.bold ? "bold" : "",
     textDecoration: item.underline ? "underline" : "",
-    backgroundColor: item.color ? convertRGBToHex(item.color) : "",
-    borderRadius: "0.5rem",
-    padding: "0.1rem",
   };
 
   return (
@@ -61,8 +59,8 @@ const TagFromString = ({ tagName, item }) => {
       {tagName === "mention" ? (
         <RenderMention item={item} />
       ) : (
-        <Tag style={elementStyle}>
-          <span>
+        <Tag>
+          <span style={elementStyle}>
             <StringWithLineBreaks text={item.text} />
           </span>
           {item.children &&
@@ -79,15 +77,16 @@ function RenderChildren({ item }) {
   const elementStyle = {
     fontWeight: item.bold ? "bold" : "",
     textDecoration: item.underline ? "underline" : "",
+    color: item.color ? "white" : "",
     background: item.color ? convertRGBToHex(item.color) : "",
-    borderRadius: "0.5rem",
-    padding: "0.1rem",
+    borderRadius: item.color ? "0.3rem" : "",
+    padding: item.color ? "0.1rem" : "",
   };
 
   return (
     <>
       <span style={elementStyle}>
-        {item.text}
+        {item.text && <span>{item.text}</span>}
         {item.children &&
           item.children.map((child) => {
             return (
