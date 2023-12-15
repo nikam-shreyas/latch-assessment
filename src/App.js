@@ -20,6 +20,24 @@ const StringWithLineBreaks = ({ text }) => {
   );
 };
 
+const RenderMention = ({ item }) => {
+  return (
+    <span
+      style={{
+        backgroundColor: convertRGBToHex(item.color),
+        borderRadius: "0.5rem",
+        padding: "0.1rem",
+      }}
+    >
+      <span>{item.text}</span>
+      {item.children &&
+        item.children.map((child) => {
+          return <TagFromString tagName={child.type || "span"} item={child} />;
+        })}
+    </span>
+  );
+};
+
 const TagFromString = ({ tagName, item }) => {
   let Tag = tagName;
   if (tagName === "mention") {
@@ -34,18 +52,26 @@ const TagFromString = ({ tagName, item }) => {
     fontWeight: item.bold ? "bold" : "",
     textDecoration: item.underline ? "underline" : "",
     backgroundColor: item.color ? convertRGBToHex(item.color) : "",
+    borderRadius: "0.5rem",
+    padding: "0.1rem",
   };
 
   return (
-    <Tag>
-      <span style={elementStyle}>
-        <StringWithLineBreaks text={item.text} />
-      </span>
-      {item.children &&
-        item.children.map((child) => {
-          return <RenderChildren item={child} />;
-        })}
-    </Tag>
+    <>
+      {tagName === "mention" ? (
+        <RenderMention item={item} />
+      ) : (
+        <Tag style={elementStyle}>
+          <span>
+            <StringWithLineBreaks text={item.text} />
+          </span>
+          {item.children &&
+            item.children.map((child) => {
+              return <RenderChildren item={child} />;
+            })}
+        </Tag>
+      )}
+    </>
   );
 };
 
@@ -54,15 +80,21 @@ function RenderChildren({ item }) {
     fontWeight: item.bold ? "bold" : "",
     textDecoration: item.underline ? "underline" : "",
     background: item.color ? convertRGBToHex(item.color) : "",
+    borderRadius: "0.5rem",
+    padding: "0.1rem",
   };
 
   return (
     <>
-      <span style={elementStyle}>{item.text}</span>
-      {item.children &&
-        item.children.map((child) => {
-          return <TagFromString tagName={child.type || "span"} item={child} />;
-        })}
+      <span style={elementStyle}>
+        {item.text}
+        {item.children &&
+          item.children.map((child) => {
+            return (
+              <TagFromString tagName={child.type || "span"} item={child} />
+            );
+          })}
+      </span>
     </>
   );
 }
