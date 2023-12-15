@@ -1,9 +1,46 @@
 import "./App.css";
+import React from "react";
+
+const StringWithLineBreaks = ({ text }) => {
+  if (!text) {
+    return null;
+  }
+
+  const parts = text.split("\n");
+
+  return (
+    <>
+      {parts.map((part, index) => (
+        <React.Fragment key={index}>
+          {part}
+          {index !== parts.length - 1 && <br />}{" "}
+        </React.Fragment>
+      ))}
+    </>
+  );
+};
 
 const TagFromString = ({ tagName, item }) => {
-  const Tag = tagName;
+  let Tag = tagName;
+  if (tagName === "mention") {
+    Tag = "span";
+  } else if (tagName === "lic") {
+    Tag = "li";
+  } else if (tagName === "block" || tagName === "clause") {
+    Tag = "div";
+  }
+
+  const elementStyle = {
+    fontWeight: item.bold ? "bold" : "",
+    textDecoration: item.underline ? "underline" : "",
+    backgroundColor: item.color ? convertRGBToHex(item.color) : "",
+  };
+
   return (
     <Tag>
+      <span style={elementStyle}>
+        <StringWithLineBreaks text={item.text} />
+      </span>
       {item.children &&
         item.children.map((child) => {
           return <RenderChildren item={child} />;
@@ -13,18 +50,15 @@ const TagFromString = ({ tagName, item }) => {
 };
 
 function RenderChildren({ item }) {
-  console.log("Render children", item);
+  const elementStyle = {
+    fontWeight: item.bold ? "bold" : "",
+    textDecoration: item.underline ? "underline" : "",
+    background: item.color ? convertRGBToHex(item.color) : "",
+  };
+
   return (
     <>
-      <span
-        style={{
-          fontWeight: item.bold ? "bold" : "",
-          textDecoration: item.underline ? "underline" : "",
-          color: item.color ? item.color : "",
-        }}
-      >
-        {item.text}
-      </span>
+      <span style={elementStyle}>{item.text}</span>
       {item.children &&
         item.children.map((child) => {
           return <TagFromString tagName={child.type || "span"} item={child} />;
@@ -44,5 +78,13 @@ function App() {
     </div>
   );
 }
+
+const convertRGBToHex = (rgb) => {
+  const regex = /\((\d+), (\d+), (\d+)\)/;
+  const [_, r, g, b] = rgb.match(regex);
+  return `#${(+r).toString(16).padStart(2, "0")}${(+g)
+    .toString(16)
+    .padStart(2, "0")}${(+b).toString(16).padStart(2, "0")}`;
+};
 
 export default App;
