@@ -14,20 +14,18 @@ const RenderChildrenComponent = ({ item }) => {
   };
 
   return (
-    <>
-      <span style={elementStyle}>
-        {item.text && <StringWithLineBreaksComponent text={item.text} />}
-        {item.children?.map((child, index) => {
-          return (
-            <TagFromStringComponent
-              key={index}
-              tagName={child.type || "span"}
-              item={child}
-            />
-          );
-        })}
-      </span>
-    </>
+    <span style={elementStyle}>
+      {item.text && <StringWithLineBreaksComponent text={item.text} />}
+      {item.children?.map((child, index) => {
+        return (
+          <TagFromStringComponent
+            key={index}
+            tagName={child.type || "span"}
+            item={child}
+          />
+        );
+      })}
+    </span>
   );
 };
 

@@ -30,19 +30,22 @@ const TagFromStringComponent = ({ tagName, item }) => {
     return <RenderClause item={item} />;
   } else
     return (
-      <>
-        <Tag title={item.title ? item.title : ""}>
-          <StringWithLineBreaksComponent
-            text={item.text}
-            bold={item.bold}
-            underline={item.underline}
-          />
-
-          {item.children?.map((child, index) => {
-            return <RenderChildrenComponent key={index} item={child} />;
-          })}
-        </Tag>
-      </>
+      <Tag title={item.title ? item.title : ""}>
+        <StringWithLineBreaksComponent
+          text={item.text}
+          bold={item.bold}
+          underline={item.underline}
+        />
+        {item.children?.map((child, index) => {
+          return (
+            <TagFromStringComponent
+              tagName={child.type || "span"}
+              key={index}
+              item={child}
+            />
+          );
+        })}
+      </Tag>
     );
 };
 

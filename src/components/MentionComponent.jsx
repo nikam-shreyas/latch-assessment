@@ -3,11 +3,14 @@ import convertRGBToHex from "../utils/RGBToHexUtil";
 import StringWithLineBreaksComponent from "./StringWithLineBreaksComponent";
 
 function changeValue(id, newValue) {
-  document.getElementById(id).innerHTML = newValue;
-  console.log(id);
+  document.getElementsByName(id).forEach((element) => {
+    element.innerHTML = newValue;
+  });
+  console.log(document.getElementsByName(id));
 }
 
 const MentionComponent = ({ item }) => {
+  let id = item.id.replaceAll(" ", "-");
   return (
     <span
       style={{
@@ -16,8 +19,8 @@ const MentionComponent = ({ item }) => {
         borderRadius: "0.3rem",
         padding: "0.1rem",
       }}
-      id={item.id}
-      onClick={() => changeValue(item.id, "new Value")}
+      name={id}
+      onClick={() => changeValue(id, "new Value")}
     >
       {item.text && <StringWithLineBreaksComponent text={item.text} />}
       {item.children?.map((child, index) => {
