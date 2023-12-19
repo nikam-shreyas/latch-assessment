@@ -3,18 +3,20 @@ import TagFromStringComponent from "./TagFromStringComponent";
 
 const RenderClause = ({ item }) => {
   return (
-    <div>
-      {item.text && <StringWithLineBreaksComponent text={item.text} />}
-      {item.children?.map((child, index) => {
-        return (
-          <TagFromStringComponent
-            key={index}
-            tagName={child.type || "span"}
-            item={child}
-          />
-        );
-      })}
-    </div>
+    <li>
+      <ol>
+        {item.text && <StringWithLineBreaksComponent text={item.text} />}
+        {item.children?.map((child, index) => {
+          return (
+            <TagFromStringComponent
+              key={index}
+              tagName={child.type || "span"}
+              item={child}
+            />
+          );
+        })}
+      </ol>
+    </li>
   );
 };
 

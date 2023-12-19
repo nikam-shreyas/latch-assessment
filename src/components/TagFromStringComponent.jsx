@@ -3,6 +3,7 @@
 import MentionComponent from "./MentionComponent";
 import StringWithLineBreaksComponent from "./StringWithLineBreaksComponent";
 import RenderChildrenComponent from "./RenderChildrenComponent";
+import RenderClause from "./RenderClauseComponent";
 
 const TagFromStringComponent = ({ tagName, item }) => {
   let Tag = tagName;
@@ -17,33 +18,32 @@ const TagFromStringComponent = ({ tagName, item }) => {
       Tag = "div";
       break;
     case "clause":
-      Tag = "ol";
+      Tag = "li";
       break;
     default:
       Tag = tagName;
   }
 
-  const elementStyle = {
-    fontWeight: item.bold ? "bold" : "",
-    textDecoration: item.underline ? "underline" : "",
-  };
+  if (tagName === "mention") {
+    return <MentionComponent item={item} />;
+  } else if (tagName === "clause") {
+    return <RenderClause item={item} />;
+  } else
+    return (
+      <>
+        <Tag title={item.title ? item.title : ""}>
+          <StringWithLineBreaksComponent
+            text={item.text}
+            bold={item.bold}
+            underline={item.underline}
+          />
 
-  return (
-    <>
-      {tagName === "mention" ? (
-        <MentionComponent item={item} />
-      ) : (
-        <Tag>
-          <span style={elementStyle}>
-            <StringWithLineBreaksComponent text={item.text} />
-          </span>
           {item.children?.map((child, index) => {
             return <RenderChildrenComponent key={index} item={child} />;
           })}
         </Tag>
-      )}
-    </>
-  );
+      </>
+    );
 };
 
 export default TagFromStringComponent;

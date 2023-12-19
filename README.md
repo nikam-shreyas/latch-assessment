@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Latch Take-Home Assesment:
+
+Built a contract UI in React by parsing data from the input.json file.
+
+## Rough Flow and Thought Process:
+
+![flow diagram](public/flow.png)
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
